@@ -20,7 +20,7 @@ data class EmojiColors(
     val error: Color
 )
 
-val LocalEmojiColors = compositionLocalOf { 
+val LocalEmojiColors = compositionLocalOf {
     EmojiColors(
         happy = HappyColor,
         sad = SadColor,
