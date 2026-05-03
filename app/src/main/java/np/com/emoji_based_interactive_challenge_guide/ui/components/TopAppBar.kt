@@ -2,7 +2,7 @@ package np.com.emoji_based_interactive_challenge_guide.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -16,10 +16,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun EmojiTopAppBar(
     title: String,
-    onBackClick: (() -> Unit)? = null,
-    onSettingsClick: (() -> Unit)? = null,
     showPoints: Boolean = false,
     points: Int = 0,
+    onBackClick: (() -> Unit)? = null,
+    onSettingsClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -45,7 +45,7 @@ fun EmojiTopAppBar(
             if (onBackClick != null) {
                 IconButton(onClick = onBackClick) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
                     )
                 }
