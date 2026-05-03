@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Emoji-Based Interactive Challenge Guide
 
 A modern Android application that provides mood-based challenges and activities to help users improve their emotional well-being through interactive tasks.
@@ -205,3 +206,14 @@ For support and questions, please open an issue in the repository.
 ---
 
 **Built with ❤️ using Jetpack Compose and Material Design 3**
+=======
+# Emoji Based Interactive Challenge Guide
+
+Android/Kotlin project with **face detection** using ML Kit.  
+Built for interactive engagement and real-time facial analysis.
+
+## Features
+- Real-time face detection
+- Jetpack Compose UI
+- Modular Android/Kotlin codebase
+>>>>>>> 57fcc0bd67338aff22e19334baebc03c5454dfdd
