@@ -17,7 +17,7 @@ data class AuthUiState(
 )
 
 class AuthViewModel(
-    private val userRepository: UserRepository = UserRepository()
+    private val userRepository: UserRepository = UserRepository.getInstance()
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -42,7 +42,7 @@ class AuthViewModel(
 
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            
+
             userRepository.loginUser(username, password)
                 .onSuccess { user ->
                     _uiState.value = _uiState.value.copy(
@@ -68,7 +68,7 @@ class AuthViewModel(
 
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            
+
             userRepository.registerUser(username, email, password)
                 .onSuccess { user ->
                     _uiState.value = _uiState.value.copy(
