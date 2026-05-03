@@ -29,7 +29,7 @@ val Typography = Typography(
         lineHeight = 44.sp,
         letterSpacing = 0.sp,
     ),
-    
+
     // Headline styles
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -52,7 +52,7 @@ val Typography = Typography(
         lineHeight = 32.sp,
         letterSpacing = 0.sp,
     ),
-    
+
     // Title styles
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -75,7 +75,7 @@ val Typography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
     ),
-    
+
     // Body styles
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -98,7 +98,7 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
     ),
-    
+
     // Label styles
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,
