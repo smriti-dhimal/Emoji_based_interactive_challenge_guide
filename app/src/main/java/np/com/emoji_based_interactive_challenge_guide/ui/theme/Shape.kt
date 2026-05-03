@@ -15,7 +15,3 @@ val Shapes = Shapes(
 // Custom shapes for specific components
 val CardShape = RoundedCornerShape(16.dp)
 val ButtonShape = RoundedCornerShape(12.dp)
-val TextFieldShape = RoundedCornerShape(8.dp)
-val ChipShape = RoundedCornerShape(20.dp)
-val BottomSheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-val DialogShape = RoundedCornerShape(20.dp)
