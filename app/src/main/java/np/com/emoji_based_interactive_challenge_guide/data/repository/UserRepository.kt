@@ -5,9 +5,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import np.com.emoji_based_interactive_challenge_guide.data.models.User
 
-class UserRepository {
+class UserRepository private constructor() {
     private val _currentUser = MutableStateFlow<User>(User())
     val currentUser: Flow<User> = _currentUser.asStateFlow()
+
+    companion object {
+        @Volatile
+        private var INSTANCE: UserRepository? = null
+
+        fun getInstance(): UserRepository {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: UserRepository().also { INSTANCE = it }
+            }
+        }
+    }
 
     suspend fun loginUser(username: String, password: String): Result<User> {
         return try {

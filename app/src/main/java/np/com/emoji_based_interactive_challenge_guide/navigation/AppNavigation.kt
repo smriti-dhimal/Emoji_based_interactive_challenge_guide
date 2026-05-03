@@ -13,6 +13,7 @@ import np.com.emoji_based_interactive_challenge_guide.ui.screens.*
 import np.com.emoji_based_interactive_challenge_guide.viewmodel.AuthViewModel
 import np.com.emoji_based_interactive_challenge_guide.viewmodel.ChallengeViewModel
 import np.com.emoji_based_interactive_challenge_guide.data.models.MoodType
+import np.com.emoji_based_interactive_challenge_guide.data.models.VerificationStatus
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
@@ -52,7 +53,7 @@ fun AppNavigation(
 
         composable(Screen.Login.route) {
             val uiState by authViewModel.uiState.collectAsState()
-            
+
             // Navigate to face detection after successful login
             LaunchedEffect(uiState.isLoggedIn) {
                 if (uiState.isLoggedIn) {
@@ -61,7 +62,7 @@ fun AppNavigation(
                     }
                 }
             }
-            
+
             LoginScreen(
                 onLogin = { username, password ->
                     authViewModel.login(username, password)
@@ -76,7 +77,7 @@ fun AppNavigation(
 
         composable(Screen.Register.route) {
             val uiState by authViewModel.uiState.collectAsState()
-            
+
             // Navigate to face detection after successful registration
             LaunchedEffect(uiState.isLoggedIn) {
                 if (uiState.isLoggedIn) {
@@ -85,7 +86,7 @@ fun AppNavigation(
                     }
                 }
             }
-            
+
             RegisterScreen(
                 onRegister = { username, email, password ->
                     authViewModel.register(username, email, password)
@@ -110,7 +111,7 @@ fun AppNavigation(
         composable(Screen.Challenge.route) {
             val uiState by challengeViewModel.uiState.collectAsState()
             val currentChallenge = uiState.currentChallenge
-            
+
             currentChallenge?.let { challenge ->
                 ChallengeScreen(
                     challenge = challenge,
@@ -120,7 +121,16 @@ fun AppNavigation(
                     },
                     onChallengeComplete = {
                         navController.navigate(Screen.Result.route)
-                    }
+                    },
+                    onAnswerSubmit = { taskId, answer ->
+                        challengeViewModel.submitTaskAnswer(taskId, answer)
+                    },
+                    onTaskDecline = { taskId ->
+                        challengeViewModel.declineTask(taskId)
+                    },
+                    showResult = uiState.showResult,
+                    isAnswerCorrect = uiState.isAnswerCorrect,
+                    correctAnswer = uiState.correctAnswer
                 )
             }
         }
@@ -128,11 +138,17 @@ fun AppNavigation(
         composable(Screen.Result.route) {
             val challengeUiState by challengeViewModel.uiState.collectAsState()
             val authUiState by authViewModel.uiState.collectAsState()
-            
+
+            // Get the current challenge points (actual earned points from correct answers only)
+            val currentChallenge = challengeUiState.currentChallenge
+            val challengePoints = currentChallenge?.tasks?.filter { it.isCompleted && it.verificationStatus == VerificationStatus.VERIFIED }?.sumOf { it.points } ?: 0
+            val totalPoints = authUiState.currentUser?.totalPoints ?: 0
+
             ResultScreen(
-                totalPoints = authUiState.currentUser?.totalPoints ?: 0,
-                challengePoints = challengeUiState.points,
+                totalPoints = totalPoints,
+                challengePoints = challengePoints,
                 onContinue = {
+                    // Ensure user data is updated before navigating
                     navController.navigate(Screen.Progress.route) {
                         popUpTo(Screen.FaceDetection.route)
                     }
@@ -142,10 +158,11 @@ fun AppNavigation(
 
         composable(Screen.Progress.route) {
             val authUiState by authViewModel.uiState.collectAsState()
-            
+
             ProgressScreen(
                 totalPoints = authUiState.currentUser?.totalPoints ?: 0,
                 completedChallenges = authUiState.currentUser?.completedChallenges ?: emptyList(),
+                currentStreak = authUiState.currentUser?.currentStreak ?: 1,
                 onNewChallenge = {
                     navController.navigate(Screen.FaceDetection.route) {
                         popUpTo(Screen.Progress.route)
