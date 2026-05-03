@@ -109,14 +109,16 @@ fun ResultScreen(
                 }
             }
 
-            // Achievement badges
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(vertical = 16.dp)
-            ) {
-                AchievementBadge(emoji = "🏆", title = "Winner")
-                AchievementBadge(emoji = "⭐", title = "Star")
-                AchievementBadge(emoji = "💪", title = "Strong")
+            // Achievement badges (only show for exceptional work)
+            if (challengePoints >= 25) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(vertical = 16.dp)
+                ) {
+                    AchievementBadge(emoji = "🏆", title = "Champion")
+                    AchievementBadge(emoji = "⭐", title = if (totalPoints >= 50) "All-Star" else "Star")
+                    AchievementBadge(emoji = "💪", title = if (challengePoints >= 30) "Powerful" else "Strong")
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))
