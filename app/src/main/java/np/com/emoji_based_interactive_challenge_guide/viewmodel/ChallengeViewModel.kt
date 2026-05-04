@@ -1,6 +1,7 @@
 package np.com.emoji_based_interactive_challenge_guide.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,11 +29,10 @@ data class ChallengeUiState(
     val correctAnswer: String = ""
 )
 
-class ChallengeViewModel(
-    private val challengeRepository: ChallengeRepository = ChallengeRepository.getInstance(),
-    private val userRepository: UserRepository = UserRepository.getInstance(),
-    private val achievementRepository: AchievementRepository = AchievementRepository.getInstance()
-) : ViewModel() {
+class ChallengeViewModel(application: Application) : AndroidViewModel(application) {
+    private val challengeRepository = ChallengeRepository.getInstance()
+    private val userRepository = UserRepository.getInstance(application)
+    private val achievementRepository = AchievementRepository.getInstance()
 
     private val _uiState = MutableStateFlow(ChallengeUiState())
     val uiState: StateFlow<ChallengeUiState> = _uiState.asStateFlow()

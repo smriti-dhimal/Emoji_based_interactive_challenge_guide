@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,14 +32,22 @@ fun AppNavigation(
     authViewModel: AuthViewModel = viewModel(),
     challengeViewModel: ChallengeViewModel = viewModel()
 ) {
+    val uiState by authViewModel.uiState.collectAsState()
+
+    val startDestination = if (uiState.isLoggedIn) {
+        Screen.FaceDetection.route
+    } else {
+        Screen.Login.route
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = startDestination
     ) {
         composable(Screen.Splash.route) {
             SplashScreen(
                 onSplashComplete = {
-                    if (authViewModel.uiState.value.isLoggedIn) {
+                    if (uiState.isLoggedIn) {
                         navController.navigate(Screen.FaceDetection.route) {
                             popUpTo(Screen.Splash.route) { inclusive = true }
                         }
@@ -52,9 +61,6 @@ fun AppNavigation(
         }
 
         composable(Screen.Login.route) {
-            val uiState by authViewModel.uiState.collectAsState()
-
-            // Navigate to face detection after successful login
             LaunchedEffect(uiState.isLoggedIn) {
                 if (uiState.isLoggedIn) {
                     navController.navigate(Screen.FaceDetection.route) {
@@ -64,21 +70,14 @@ fun AppNavigation(
             }
 
             LoginScreen(
-                onLogin = { username, password ->
-                    authViewModel.login(username, password)
-                },
-                onRegister = {
-                    navController.navigate(Screen.Register.route)
-                },
+                onLogin = { u, p -> authViewModel.login(u, p) },
+                onRegister = { navController.navigate(Screen.Register.route) },
                 isLoading = uiState.isLoading,
                 error = uiState.error
             )
         }
 
         composable(Screen.Register.route) {
-            val uiState by authViewModel.uiState.collectAsState()
-
-            // Navigate to face detection after successful registration
             LaunchedEffect(uiState.isLoggedIn) {
                 if (uiState.isLoggedIn) {
                     navController.navigate(Screen.FaceDetection.route) {
@@ -88,12 +87,8 @@ fun AppNavigation(
             }
 
             RegisterScreen(
-                onRegister = { username, email, password ->
-                    authViewModel.register(username, email, password)
-                },
-                onBackToLogin = {
-                    navController.navigateUp()
-                },
+                onRegister = { u, e, p -> authViewModel.register(u, e, p) },
+                onBackToLogin = { navController.navigateUp() },
                 isLoading = uiState.isLoading,
                 error = uiState.error
             )
