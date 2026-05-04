@@ -30,6 +30,14 @@ class UserRepository private constructor(context: Context) {
             }
         }
 
+        private fun hashPassword(password: String): String {
+            return "${password.hashCode()}_${password.reversed().hashCode()}"
+        }
+
+        private fun verifyPassword(password: String, hashed: String): Boolean {
+            return hashPassword(password) == hashed
+        }
+
         private const val KEY_USERS = "users"
         private const val KEY_LOGGED_IN = "logged_in"
         private const val KEY_CURRENT_USER = "current_user"
@@ -103,7 +111,7 @@ class UserRepository private constructor(context: Context) {
                 return Result.failure(Exception("Username already exists"))
             }
 
-            val regUser = RegisteredUser(username, email, password)
+            val regUser = RegisteredUser(username, email, hashPassword(password))
             registeredUsers[username] = regUser
             saveUsers()
 
@@ -127,7 +135,7 @@ class UserRepository private constructor(context: Context) {
         return try {
             val regUser = registeredUsers[username]
 
-            if (regUser != null && regUser.password == password) {
+            if (regUser != null && verifyPassword(password, regUser.password)) {
 
                 val user = User(
                     id = "user_${System.currentTimeMillis()}",
