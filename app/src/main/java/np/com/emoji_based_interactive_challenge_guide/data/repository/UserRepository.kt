@@ -35,7 +35,13 @@ class UserRepository private constructor(context: Context) {
         }
 
         private fun verifyPassword(password: String, hashed: String): Boolean {
-            return hashPassword(password) == hashed
+            // Check if password is already hashed (contains underscore)
+            return if (hashed.contains("_")) {
+                hashPassword(password) == hashed
+            } else {
+                // Legacy plain text password
+                password == hashed
+            }
         }
 
         private const val KEY_USERS = "users"
