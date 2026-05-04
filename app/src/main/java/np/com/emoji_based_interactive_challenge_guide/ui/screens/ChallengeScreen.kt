@@ -123,6 +123,16 @@ fun ChallengeScreen(
                                     enabled = userAnswer.isNotBlank()
                                 )
 
+                                // Auto-advance hint for perfect flow
+                                if (userAnswer.isNotBlank()) {
+                                    Text(
+                                        text = "💡 Press Enter to submit quickly",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.padding(top = 4.dp)
+                                    )
+                                }
+
                                 EmojiButton(
                                     text = "Skip",
                                     emoji = "⏭️",
@@ -224,14 +234,27 @@ fun ChallengeScreen(
                     }
                 }
 
-                // Continue button after showing result
+                // Continue button after showing result with perfect flow
                 if (showResult) {
-                    EmojiButton(
-                        text = "Continue",
-                        emoji = "➡️",
-                        onClick = { onTaskComplete(task.id) },
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        if (isAnswerCorrect) {
+                            Text(
+                                text = "✨ Perfect! Well done!",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        EmojiButton(
+                            text = if (isAnswerCorrect) "Next Task" else "Try Again",
+                            emoji = if (isAnswerCorrect) "➡️" else "🔄",
+                            onClick = { onTaskComplete(task.id) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
 
