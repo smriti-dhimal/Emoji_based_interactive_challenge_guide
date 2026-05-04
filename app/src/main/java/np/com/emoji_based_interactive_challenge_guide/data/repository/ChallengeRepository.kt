@@ -384,7 +384,7 @@ class ChallengeRepository private constructor() {
     // Pattern recognition
     private val easyPatternPuzzles = listOf(
         "Complete: 😊😂😊😂?" to "😊",
-        "Complete: ▲●▲●?" to "▲",
+        "Complete: Triangle, Circle, Triangle, Circle, ?" to "Triangle",
         "Complete: Red, Blue, Red, ?" to "Blue",
         "Complete: 🌟🌟🌟?" to "🌟",
         "Complete: A, B, A, B, ?" to "A"
@@ -392,7 +392,7 @@ class ChallengeRepository private constructor() {
 
     private val mediumPatternPuzzles = listOf(
         "Complete: 😊😂🤣😊😂?" to "🤣",
-        "Complete: ▲●■▲●?" to "■",
+        "Complete: Triangle, Circle, Square, Triangle, Circle, ?" to "Square",
         "Complete: Red, Blue, Green, Red, Blue, ?" to "Green",
         "Complete: 🌟⭐✨🌟⭐?" to "✨",
         "Complete: A, C, E, G, ?" to "I"
@@ -400,7 +400,7 @@ class ChallengeRepository private constructor() {
 
     private val hardPatternPuzzles = listOf(
         "Complete: 😊😂🤣😂😊😂?" to "🤣",
-        "Complete: ▲●■♦▲●?" to "■",
+        "Complete: Triangle, Circle, Square, Diamond, Triangle, Circle, ?" to "Square",
         "Complete: Monday, Wednesday, Friday, ?" to "Sunday",
         "Complete: 🌟⭐✨💫🌟⭐?" to "✨",
         "Complete: A, D, G, J, ?" to "M"
